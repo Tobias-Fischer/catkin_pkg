@@ -60,7 +60,8 @@ def find_package_paths(basepath, exclude_paths=None, exclude_subspaces=False):
     for dirpath, dirnames, filenames in os.walk(basepath, followlinks=True):
         if set(dirnames + filenames) & {'AMENT_IGNORE', 'CATKIN_IGNORE', 'COLCON_IGNORE'} or \
             os.path.realpath(dirpath) in real_exclude_paths or \
-                (exclude_subspaces and '.catkin' in filenames):
+                (exclude_subspaces and '.catkin' in filenames) or \
+                os.path.relpath(dirpath, basepath).startswith('pkgs/'):
             del dirnames[:]
             continue
         elif PACKAGE_MANIFEST_FILENAME in filenames:
